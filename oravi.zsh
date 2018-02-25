@@ -8,7 +8,6 @@
 export ORAVI_VERSION='1.0'
 
 # CONFIGURATION {{{
-# ORAVI_PROMPT_ORDER=(time space user user_host host char)
 if [ -z "$ORAVI_PROMPT_ORDER" ]; then
   ORAVI_PROMPT_ORDER=(
     # time
@@ -19,6 +18,7 @@ if [ -z "$ORAVI_PROMPT_ORDER" ]; then
     dir
     git
     pyenv
+    swiftenv
     exec_time
     jobs
     exit_code
@@ -94,6 +94,12 @@ ORAVI_PYENV_SYMBOL="${ORAVI_PYENV_SYMBOL:-""}"
 ORAVI_PYENV_PREFIX="${ORAVI_PYENV_PREFIX:-" $ORAVI_PYENV_SYMBOL "}"
 ORAVI_PYENV_SUFFIX="${ORAVI_PYENV_SUFFIX:-""}"
 ORAVI_PYENV_COLOR="${ORAVI_PYENV_COLOR:-"yellow"}"
+# }}}
+# SwiftEnv {{{
+ORAVI_SWIFTENV_SYMBOL="${ORAVI_PYENV_SYMBOL:-""}"
+ORAVI_SWIFTENV_PREFIX="${ORAVI_PYENV_PREFIX:-" $ORAVI_SWIFTENV_SYMBOL "}"
+ORAVI_SWIFTENV_SUFFIX="${ORAVI_PYENV_SUFFIX:-""}"
+ORAVI_SWIFTENV_COLOR="${ORAVI_PYENV_COLOR:-"yellow"}"
 # }}}
 # Time {{{
 ORAVI_TIME_PREFIX="${ORAVI_TIME_PREFIX:-""}"
@@ -293,7 +299,7 @@ oravi_jobs() {
   local jobs_amount=$( (jobs) | wc -l)
   [[ $jobs_amount -gt 0 ]] || return
   [[ $jobs_amount -eq 1 ]] && jobs_amout=''
-  echo -n "%F{$ORAVI_JOBS_COLOR}%B$ORAVI_JOBS_PREFIX$ORAVI_JOBS_SYMBOL$jobs_amount$ORAVI_JOBS_SUFFIX"
+  echo -n "%F{$ORAVI_JOBS_COLOR}%B$ORAVI_JOBS_PREFIX$ORAVI_JOBS_SYMBOL$jobs_amount$ORAVI_JOBS_SUFFIX%b%f"
 }
 # }}}
 # PyEnv {{{
@@ -302,6 +308,15 @@ oravi_pyenv() {
   local pyenv_status="$(pyenv version-name)"
   if [[ $pyenv_status != 'system' ]]; then
     echo -n "%F{$ORAVI_PYENV_COLOR}%B$ORAVI_PYENV_PREFIX$pyenv_status$ORAVI_PYENV_SUFFIX%b%f"
+  fi
+}
+# }}}
+# SwiftEnv {{{
+oravi_swiftenv() {
+  oravi::exists swiftenv || return
+  local swiftenv_status="$(swiftenv version-name)"
+  if [[ $swiftenv_status != 'system' ]]; then
+    echo -n "%F{$ORAVI_SWIFTENV_COLOR}%B$ORAVI_SWIFTENV_PREFIX$swiftenv_status$ORAVI_SWIFTENV_SUFFIX%b%f"
   fi
 }
 # }}}
