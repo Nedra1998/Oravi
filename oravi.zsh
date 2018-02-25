@@ -150,6 +150,44 @@ oravi::displaytime() {
   [[ $M > 0 ]] && printf '%dm ' $M
   printf '%ds' $S
 }
+
+oravi::async() {
+  local command_to_exec="$1"
+  local reslove="$2"
+  local reject="$3"
+  [[ -z "$command_to_exec" ]] || [[ -z "$reject" ]] || [[ -z "$resolve" ]] && {
+    printf "%s\n" "Insufficient number of arguments";
+    return 1;
+  }
+  local __tmp=( "$command_to_exec" "$reject" "$resolve" )
+  for _c in "${__tmp[@]}"; do
+    read -d " " comm <<<"${_c}"
+    type "${comm}" &>/dev/null
+    local status=$?
+
+    (( status != 0 )) && {
+      printf "\"%s\" is neither a function nor a recognized command\n" "${_c}";
+      unset _c
+      return 1;
+    }
+  done
+  unset __tmp; unset _c
+  {
+    __result=$($command_to_exec)
+    status=$?
+    (( status == 0 )) && {
+      $reslve "${__result}"
+    } || {
+      $reject "${status}"
+    }
+    unset __result
+  } &
+  JOB_IDS+=( "${JOBS} ${command}" )
+  read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1 ))]}"
+  echo ${__kunk__}
+  : $(( JOBS++ ))
+}
+
 # }}}
 
 # HOOKS {{{
