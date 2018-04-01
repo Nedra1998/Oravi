@@ -101,6 +101,12 @@ ORAVI_SWIFTENV_PREFIX="${ORAVI_PYENV_PREFIX:-" $ORAVI_SWIFTENV_SYMBOL "}"
 ORAVI_SWIFTENV_SUFFIX="${ORAVI_PYENV_SUFFIX:-""}"
 ORAVI_SWIFTENV_COLOR="${ORAVI_PYENV_COLOR:-"yellow"}"
 # }}}
+# GoEnv {{{
+ORAVI_GOENV_SYMBOL="${ORAVI_GOENV_SYMBOL:-""}"
+ORAVI_GOENV_PREFIX="${ORAVI_GOENV_PREFIX:-" $ORAVI_GOENV_SYMBOL "}"
+ORAVI_GOENV_SUFFIX="${ORAVI_GOENV_SUFFIX:-""}"
+ORAVI_GOENV_COLOR="${ORAVI_GOENV_COLOR:-"blue"}"
+# }}}
 # Time {{{
 ORAVI_TIME_PREFIX="${ORAVI_TIME_PREFIX:-""}"
 ORAVI_TIME_SUFFIX="${ORAVI_TIME_SUFFIX:-""}"
@@ -355,6 +361,15 @@ oravi_swiftenv() {
   local swiftenv_status="$(swiftenv version-name)"
   if [[ $swiftenv_status != 'system' ]]; then
     echo -n "%F{$ORAVI_SWIFTENV_COLOR}%B$ORAVI_SWIFTENV_PREFIX$swiftenv_status$ORAVI_SWIFTENV_SUFFIX%b%f"
+  fi
+}
+# }}}
+# GoEnv {{{
+oravi_goenv() {
+  oravi::exists goenv || return
+  local goenv_status="$(goenv version-name)"
+  if [[ $goenv_status != 'system' ]]; then
+    echo -n "%F{ORAVI_GOENV_COLOR}%B$ORAVI_GOENV_PREFIX$goenv_status$ORAVI_GOENV_SUFFIX%b%f"
   fi
 }
 # }}}
