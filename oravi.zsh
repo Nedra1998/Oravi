@@ -27,7 +27,6 @@ if [ -z "$ORAVI_PROMPT_ORDER" ]; then
   )
 fi
 
-
 # Char {{{
 ORAVI_CHAR_SYMBOL="${ORAVI_CHAR_SYMBOL:-"❯"}"
 ORAVI_CHAR_PREFIX="${ORAVI_CHAR_PREFIX:-""}"
@@ -103,7 +102,7 @@ ORAVI_SWIFTENV_SUFFIX="${ORAVI_PYENV_SUFFIX:-""}"
 ORAVI_SWIFTENV_COLOR="${ORAVI_PYENV_COLOR:-"yellow"}"
 # }}}
 # GoEnv {{{
-ORAVI_GOENV_SYMBOL="${ORAVI_GOENV_SYMBOL:-""}"
+ORAVI_GOENV_SYMBOL="${ORAVI_GOENV_SYMBOL:-""}"
 ORAVI_GOENV_PREFIX="${ORAVI_GOENV_PREFIX:-" $ORAVI_GOENV_SYMBOL "}"
 ORAVI_GOENV_SUFFIX="${ORAVI_GOENV_SUFFIX:-""}"
 ORAVI_GOENV_COLOR="${ORAVI_GOENV_COLOR:-"blue"}"
@@ -370,7 +369,7 @@ oravi_goenv() {
   oravi::exists goenv || return
   local goenv_status="$(goenv version-name)"
   if [[ $goenv_status != 'system' ]]; then
-    echo -n "%F{ORAVI_GOENV_COLOR}%B$ORAVI_GOENV_PREFIX$goenv_status$ORAVI_GOENV_SUFFIX%b%f"
+    echo -n "%F{$ORAVI_GOENV_COLOR}$ORAVI_GOENV_PREFIX$goenv_status$ORAVI_GOENV_SUFFIX%b%f"
   fi
 }
 # }}}

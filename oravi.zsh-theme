@@ -8,7 +8,6 @@
 export ORAVI_VERSION='1.0'
 
 # CONFIGURATION {{{
-# ORAVI_PROMPT_ORDER=(time space user user_host host char)
 if [ -z "$ORAVI_PROMPT_ORDER" ]; then
   ORAVI_PROMPT_ORDER=(
     # time
@@ -19,13 +18,14 @@ if [ -z "$ORAVI_PROMPT_ORDER" ]; then
     dir
     git
     pyenv
+    swiftenv
+    goenv
     exec_time
     jobs
     exit_code
     char
   )
 fi
-
 
 # Char {{{
 ORAVI_CHAR_SYMBOL="${ORAVI_CHAR_SYMBOL:-"❯"}"
@@ -95,6 +95,18 @@ ORAVI_PYENV_PREFIX="${ORAVI_PYENV_PREFIX:-" $ORAVI_PYENV_SYMBOL "}"
 ORAVI_PYENV_SUFFIX="${ORAVI_PYENV_SUFFIX:-""}"
 ORAVI_PYENV_COLOR="${ORAVI_PYENV_COLOR:-"yellow"}"
 # }}}
+# SwiftEnv {{{
+ORAVI_SWIFTENV_SYMBOL="${ORAVI_PYENV_SYMBOL:-""}"
+ORAVI_SWIFTENV_PREFIX="${ORAVI_PYENV_PREFIX:-" $ORAVI_SWIFTENV_SYMBOL "}"
+ORAVI_SWIFTENV_SUFFIX="${ORAVI_PYENV_SUFFIX:-""}"
+ORAVI_SWIFTENV_COLOR="${ORAVI_PYENV_COLOR:-"yellow"}"
+# }}}
+# GoEnv {{{
+ORAVI_GOENV_SYMBOL="${ORAVI_GOENV_SYMBOL:-""}"
+ORAVI_GOENV_PREFIX="${ORAVI_GOENV_PREFIX:-" $ORAVI_GOENV_SYMBOL "}"
+ORAVI_GOENV_SUFFIX="${ORAVI_GOENV_SUFFIX:-""}"
+ORAVI_GOENV_COLOR="${ORAVI_GOENV_COLOR:-"blue"}"
+# }}}
 # Time {{{
 ORAVI_TIME_PREFIX="${ORAVI_TIME_PREFIX:-""}"
 ORAVI_TIME_SUFFIX="${ORAVI_TIME_SUFFIX:-""}"
@@ -144,6 +156,44 @@ oravi::displaytime() {
   [[ $M > 0 ]] && printf '%dm ' $M
   printf '%ds' $S
 }
+
+oravi::async() {
+  local command_to_exec="$1"
+  local reslove="$2"
+  local reject="$3"
+  [[ -z "$command_to_exec" ]] || [[ -z "$reject" ]] || [[ -z "$resolve" ]] && {
+    printf "%s\n" "Insufficient number of arguments";
+    return 1;
+  }
+  local __tmp=( "$command_to_exec" "$reject" "$resolve" )
+  for _c in "${__tmp[@]}"; do
+    read -d " " comm <<<"${_c}"
+    type "${comm}" &>/dev/null
+    local status=$?
+
+    (( status != 0 )) && {
+      printf "\"%s\" is neither a function nor a recognized command\n" "${_c}";
+      unset _c
+      return 1;
+    }
+  done
+  unset __tmp; unset _c
+  {
+    __result=$($command_to_exec)
+    status=$?
+    (( status == 0 )) && {
+      $reslve "${__result}"
+    } || {
+      $reject "${status}"
+    }
+    unset __result
+  } &
+  JOB_IDS+=( "${JOBS} ${command}" )
+  read -d " " -a __kunk__ <<< "${JOB_IDS[$(( ${#JOB_IDS[@]} - 1 ))]}"
+  echo ${__kunk__}
+  : $(( JOBS++ ))
+}
+
 # }}}
 
 # HOOKS {{{
@@ -293,7 +343,7 @@ oravi_jobs() {
   local jobs_amount=$( (jobs) | wc -l)
   [[ $jobs_amount -gt 0 ]] || return
   [[ $jobs_amount -eq 1 ]] && jobs_amout=''
-  echo -n "%F{$ORAVI_JOBS_COLOR}%B$ORAVI_JOBS_PREFIX$ORAVI_JOBS_SYMBOL$jobs_amount$ORAVI_JOBS_SUFFIX"
+  echo -n "%F{$ORAVI_JOBS_COLOR}%B$ORAVI_JOBS_PREFIX$ORAVI_JOBS_SYMBOL$jobs_amount$ORAVI_JOBS_SUFFIX%b%f"
 }
 # }}}
 # PyEnv {{{
@@ -302,6 +352,24 @@ oravi_pyenv() {
   local pyenv_status="$(pyenv version-name)"
   if [[ $pyenv_status != 'system' ]]; then
     echo -n "%F{$ORAVI_PYENV_COLOR}%B$ORAVI_PYENV_PREFIX$pyenv_status$ORAVI_PYENV_SUFFIX%b%f"
+  fi
+}
+# }}}
+# SwiftEnv {{{
+oravi_swiftenv() {
+  oravi::exists swiftenv || return
+  local swiftenv_status="$(swiftenv version-name)"
+  if [[ $swiftenv_status != 'system' ]]; then
+    echo -n "%F{$ORAVI_SWIFTENV_COLOR}%B$ORAVI_SWIFTENV_PREFIX$swiftenv_status$ORAVI_SWIFTENV_SUFFIX%b%f"
+  fi
+}
+# }}}
+# GoEnv {{{
+oravi_goenv() {
+  oravi::exists goenv || return
+  local goenv_status="$(goenv version-name)"
+  if [[ $goenv_status != 'system' ]]; then
+    echo -n "%F{$ORAVI_GOENV_COLOR}$ORAVI_GOENV_PREFIX$goenv_status$ORAVI_GOENV_SUFFIX%b%f"
   fi
 }
 # }}}
