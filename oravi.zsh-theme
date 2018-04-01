@@ -20,6 +20,7 @@ if [ -z "$ORAVI_PROMPT_ORDER" ]; then
     pyenv
     swiftenv
     goenv
+    rbenv
     exec_time
     jobs
     exit_code
@@ -106,6 +107,12 @@ ORAVI_GOENV_SYMBOL="${ORAVI_GOENV_SYMBOL:-""}"
 ORAVI_GOENV_PREFIX="${ORAVI_GOENV_PREFIX:-" $ORAVI_GOENV_SYMBOL "}"
 ORAVI_GOENV_SUFFIX="${ORAVI_GOENV_SUFFIX:-""}"
 ORAVI_GOENV_COLOR="${ORAVI_GOENV_COLOR:-"blue"}"
+# }}}
+# RbEnv {{{
+ORAVI_RBENV_SYMBOL="${ORAVI_RBENV_SYMBOL:-""}"
+ORAVI_RBENV_PREFIX="${ORAVI_RBENV_PREFIX:-" $ORAVI_RBENV_SYMBOL "}"
+ORAVI_RBENV_SUFFIX="${ORAVI_RBENV_SUFFIX:-""}"
+ORAVI_RBENV_COLOR="${ORAVI_RBENV_COLOR:-"red"}"
 # }}}
 # Time {{{
 ORAVI_TIME_PREFIX="${ORAVI_TIME_PREFIX:-""}"
@@ -370,6 +377,15 @@ oravi_goenv() {
   local goenv_status="$(goenv version-name)"
   if [[ $goenv_status != 'system' ]]; then
     echo -n "%F{$ORAVI_GOENV_COLOR}$ORAVI_GOENV_PREFIX$goenv_status$ORAVI_GOENV_SUFFIX%b%f"
+  fi
+}
+# }}}
+# RbEnv {{{
+oravi_rbenv() {
+  oravi::exists rbenv || return
+  local rbenv_status="$(rbenv version-name)"
+  if [[ $rbenv_status != 'system' ]]; then
+    echo -n "%F{$ORAVI_RBENV_COLOR}$ORAVI_RBENV_PREFIX$rbenv_status$ORAVI_RBENV_SUFFIX%b%f"
   fi
 }
 # }}}
