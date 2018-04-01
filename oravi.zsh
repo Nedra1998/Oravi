@@ -19,6 +19,7 @@ if [ -z "$ORAVI_PROMPT_ORDER" ]; then
     git
     pyenv
     swiftenv
+    goenv
     exec_time
     jobs
     exit_code
