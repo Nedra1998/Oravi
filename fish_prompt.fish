@@ -125,10 +125,7 @@ function __oravi_is_git
 end
 
 function __oravi_exists -a cmd
-  if not command -sq $cmd
-    return 1
-  end
-  return 0
+  echo (command -v $cmd)
 end
 
 # TODO
@@ -213,67 +210,67 @@ function __oravi_git
   set_color normal
   # echo -n "$ORAVI_GIT_STATUS_PREFIX"
   if [ (string match -r " \?\? " "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_UNTRACKED_COLOR
     echo -n "$ORAVI_GIT_STATUS_UNTRACKED"
   end
 
   if [ (string match -r " A[ MDAU] " "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_ADDED_COLOR
     echo -n "$ORAVI_GIT_STATUS_ADDED"
   else if [ (string match -r " UA" "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_ADDED_COLOR
     echo -n "$ORAVI_GIT_STATUS_ADDED"
   end
 
   if [ (string match -r " M[ MD] " "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_MODIFIED_COLOR
     echo -n "$ORAVI_GIT_STATUS_MODIFIED"
   else if [ (string match -r " [ MARC]M" "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_MODIFIED_COLOR
     echo -n "$ORAVI_GIT_STATUS_MODIFIED"
   end
 
   if [ (string match -r " R[ MD]" "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_RENAMED_COLOR
     echo -n "$ORAVI_GIT_STATUS_RENAMED"
   end
 
   if [ (string match -r " [MARCDU ]D" "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_DELETED_COLOR
     echo -n "$ORAVI_GIT_STATUS_DELETED"
   else if [ (string match -r " D[ UM]" "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_DELETED_COLOR
     echo -n "$ORAVI_GIT_STATUS_DELETED"
   end
 
   if [ (command dig rev-parse --verify refs/stash >/dev/null 2>&1) ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_STASHED_COLOR
     echo -n "$ORAVI_GIT_STATUS_STASHED"
   end
 
   if [ (string match -r " U[UDA] " "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_UNMERGED_COLOR
     echo -n "$ORAVI_GIT_STATUS_UNMERGED"
   else if [ (string match -r " AA " "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_UNMERGED_COLOR
     echo -n "$ORAVI_GIT_STATUS_UNMERGED"
   else if [ (string match -r " DD " "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_UNMERGED_COLOR
     echo -n "$ORAVI_GIT_STATUS_UNMERGED"
   else if [ (string match -r " [DA]U " "$index") ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_UNMERGED_COLOR
     echo -n "$ORAVI_GIT_STATUS_UNMERGED"
   end
@@ -289,15 +286,15 @@ function __oravi_git
   end
 
   if [ $is_ahead = true -a $is_behind = true ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_DIVERGED_COLOR
     echo -n "$ORAVI_GIT_STATUS_DIVERGED"
   else if [ $is_ahead = true ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_AHEAD_COLOR
     echo -n "$ORAVI_GIT_STATUS_AHEAD"
   else if [ $is_behind = true ]
-    if [ $spacer == false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
+    if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_BEHIND_COLOR
     echo -n "$ORAVI_GIT_STATUS_BEHIND"
   end
@@ -341,7 +338,7 @@ function __oravi_char -a ret_val
 end
 
 function __oravi_pyenv
-  __oravi_exists pyenv or return
+  if [ -z (__oravi_exists "pyenv") ]; return; end
   set -l version (pyenv version-name)
   if [ "$version" != "system" ]
     set_color -o $ORAVI_PYENV_COLOR
@@ -350,7 +347,7 @@ function __oravi_pyenv
   end
 end
 function __oravi_swiftenv
-  __oravi_exists swiftenv or return
+  if [ -z (__oravi_exists "swiftenv") ]; return; end
   set -l version (swiftenv version-name)
   if [ "$version" != "system" ]
     set_color -o $ORAVI_SWIFTENV_COLOR
@@ -359,7 +356,7 @@ function __oravi_swiftenv
   end
 end
 function __oravi_goenv
-  __oravi_exists goenv or return
+  if [ -z (__oravi_exists "goenv") ]; return; end
   set -l version (goenv version-name)
   if [ "$version" != "system" ]
     set_color $ORAVI_GOENV_COLOR
@@ -368,7 +365,7 @@ function __oravi_goenv
   end
 end
 function __oravi_rbenv
-  __oravi_exists rbenv or return
+  if [ -z (__oravi_exists "rbenv") ]; return; end
   set -l version (rbenv version-name)
   if [ "$version" != "system" ]
     set_color $ORAVI_RBENV_COLOR
