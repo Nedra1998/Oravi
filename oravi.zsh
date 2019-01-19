@@ -73,7 +73,7 @@ ORAVI_GIT_STATUS_RENAMED_COLOR="${ORAVI_GIT_STATUS_RENAMED_COLOR:-"magenta"}"
 ORAVI_GIT_STATUS_RENAMED="${ORAVI_GIT_STATUS_RENAMED:-" "}"
 ORAVI_GIT_STATUS_DELETED_COLOR="${ORAVI_GIT_STATUS_DELETED_COLOR:-"red"}"
 ORAVI_GIT_STATUS_DELETED="${ORAVI_GIT_STATUS_DELETED:-" "}"
-ORAVI_GIT_STATUS_STASHED_COLOR="${ORAVI_GIT_STATUS_UNMERGED_COLOR="green"}"
+ORAVI_GIT_STATUS_STASHED_COLOR="${ORAVI_GIT_STATUS_STACHED_COLOR="green"}"
 ORAVI_GIT_STATUS_STASHED="${ORAVI_GIT_STATUS_STASHED="$ "}"
 ORAVI_GIT_STATUS_UNMERGED_COLOR="${ORAVI_GIT_STATUS_UNMERGED_COLOR:-"cyan"}"
 ORAVI_GIT_STATUS_UNMERGED="${ORAVI_GIT_STATUS_UNMERGED:-"= "}"
@@ -238,11 +238,16 @@ oravi_char() {
 # Dir {{{
 oravi_dir() {
   local dir
-  if [[ $ORAVI_DIR_TRUNC == true ]]; then
-    dir="%c"
-  elif [[ $ORAVI_DIR_TRUNC_REPO == true ]] && oravi::is_git; then
+  if [[ $ORAVI_DIR_TRUNC_REPO == true ]] && oravi::is_git; then
     local git_root=$(git rev-parse --show-toplevel)
-    dir="$git_root:t${$(expr $(pwd) : "$git_root\(.*\)")}"
+    local current_dir=$(pwd)
+    dir="$(basename $git_root)/$(realpath --relative-to=$git_root $current_dir)"
+    if [[ $git_root == $current_dir ]]; then
+      dir="%c"
+    fi
+    # dir="$git_root:t${$(expr $(pwd) : "$git_root\(.*\)")}"
+  elif [[ $ORAVI_DIR_TRUNC == true ]]; then
+    dir="%c"
   else
     dir="%~"
   fi
@@ -273,7 +278,7 @@ oravi_git() {
   local git_current_branch=${ref#refs/heads/}
   echo -n "%F{$ORAVI_GIT_BRANCH_COLOR}%B$ORAVI_GIT_BRANCH_PREFIX${git_current_branch}$ORAVI_GIT_BRANCH_SUFFIX%b%f"
 
-  local INDEX git_statu=""
+  local INDEX git_status=""
   INDEX=$(command git status --porcelain -b 2> /dev/null)
 
   # Check for untracked files
