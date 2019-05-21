@@ -1,1 +1,0 @@
-oravi.zsh

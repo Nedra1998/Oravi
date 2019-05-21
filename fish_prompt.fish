@@ -1,4 +1,29 @@
 # Char {{{
+if [ "$TERM" = "linux" ]
+  set -q ORAVI_CHAR_SYMBOL; or set ORAVI_CHAR_SYMBOL ">"
+  set -q ORAVI_EXEC_TIME_SYMBOL; or set ORAVI_EXEC_TIME_SYMBOL ""
+  set -q ORAVI_EXIT_SYMBOL; or set ORAVI_EXIT_SYMBOL "X"
+  set -q ORAVI_EXIT_PREFIX; or set ORAVI_EXIT_PREFIX " <$ORAVI_EXIT_SYMBOL "
+  set -q ORAVI_EXIT_SUFFIX; or set ORAVI_EXIT_SUFFIX ">"
+  set -q ORAVI_GIT_SYMBOL; or set ORAVI_GIT_SYMBOL "git:"
+  set -q ORAVI_GIT_STATUS_UNTRACKED; or set ORAVI_GIT_STATUS_UNTRACKED "/ "
+  set -q ORAVI_GIT_STATUS_ADDED; or set ORAVI_GIT_STATUS_ADDED "+ "
+  set -q ORAVI_GIT_STATUS_MODIFIED; or set ORAVI_GIT_STATUS_MODIFIED "* "
+  set -q ORAVI_GIT_STATUS_RENAMED; or set ORAVI_GIT_STATUS_RENAMED "> "
+  set -q ORAVI_GIT_STATUS_DELETED; or set ORAVI_GIT_STATUS_DELETED "- "
+  set -q ORAVI_GIT_STATUS_STASHED=; or set ORAVI_GIT_STATUS_STASHED "\$ "
+  set -q ORAVI_GIT_STATUS_UNMERGED; or set ORAVI_GIT_STATUS_UNMERGED "= "
+  set -q ORAVI_GIT_STATUS_AHEAD; or set ORAVI_GIT_STATUS_AHEAD "v "
+  set -q ORAVI_GIT_STATUS_BEHIND; or set ORAVI_GIT_STATUS_BEHIND "^ "
+  set -q ORAVI_GIT_STATUS_DIVERGED; or set ORAVI_GIT_STATUS_DIVERGED "! "
+  set -q ORAVI_JOBS_SYMBOL; or set ORAVI_JOBS_SYMBOL "*"
+  set -q ORAVI_PYENV_SYMBOL; or set ORAVI_PYENV_SYMBOL "pyenv:"
+  set -q ORAVI_SWIFTENV_SYMBOL; or set ORAVI_SWIFTENV_SYMBOL "swiftenv:"
+  set -q ORAVI_RBENV_SYMBOL; or set ORAVI_RBENV_SYMBOL "rbenv:"
+  set -q ORAVI_GOENV_SYMBOL; or set ORAVI_GOENV_SYMBOL "goenv:"
+else
+
+end
 set -q ORAVI_CHAR_SYMBOL; or set ORAVI_CHAR_SYMBOL "❯"
 set -q ORAVI_CHAR_PREFIX; or set ORAVI_CHAR_PREFIX ""
 set -q ORAVI_CHAR_SUFFIX; or set ORAVI_CHAR_SUFFIX " "
@@ -13,11 +38,11 @@ set -q ORAVI_DIR_SUFIX; or set ORAVI_DIR_SUFIX ""
 set -q ORAVI_DIR_COLOR; or set ORAVI_DIR_COLOR "cyan"
 # }}}
 # Exec Time {{{
-set ORAVI_EXEC_TIME_SYMBOL; or set ORAVI_EXEC_TIME_SYMBOL ""
-set ORAVI_EXEC_TIME_PREFIX; or set ORAVI_EXEC_TIME_PREFIX " [$ORAVI_EXEC_TIME_SYMBOL "
-set ORAVI_EXEC_TIME_SUFFIX; or set ORAVI_EXEC_TIME_SUFFIX "]"
-set ORAVI_EXEC_TIME_COLOR; or set ORAVI_EXEC_TIME_COLOR "yellow"
-set ORAVI_EXEC_TIME_ELAPSED; or set ORAVI_EXEC_TIME_ELAPSED 2000
+set -q ORAVI_EXEC_TIME_SYMBOL; or set ORAVI_EXEC_TIME_SYMBOL ""
+set -q ORAVI_EXEC_TIME_PREFIX; or set ORAVI_EXEC_TIME_PREFIX " [$ORAVI_EXEC_TIME_SYMBOL "
+set -q ORAVI_EXEC_TIME_SUFFIX; or set ORAVI_EXEC_TIME_SUFFIX "]"
+set -q ORAVI_EXEC_TIME_COLOR; or set ORAVI_EXEC_TIME_COLOR "yellow"
+set -q ORAVI_EXEC_TIME_ELAPSED; or set ORAVI_EXEC_TIME_ELAPSED 2000
 # }}}
 # Exit Code {{{
 set -q ORAVI_EXIT_SYMBOL; or set ORAVI_EXIT_SYMBOL ""
@@ -130,11 +155,11 @@ end
 
 # TODO
 function __oravi_displaytime -a time
-  set -l D (math "$time/1000/60/60/24")
-  set -l H (math "$time/1000/60/60%24")
-  set -l M (math "$time/1000/60%60")
-  set -l S (math "$time/1000%60")
-  set -l MS (math "$time%1000")
+  set -l D (math -s0 "$time/1000/60/60/24")
+  set -l H (math -s0 "$time/1000/60/60%24")
+  set -l M (math -s0 "$time/1000/60%60")
+  set -l S (math -s0 "$time/1000%60")
+  set -l MS (math -s0 "$time%1000")
   if [ $D != 0 ]; printf "%dd " $D; end
   if [ $H != 0 ]; printf "%dh " $H; end
   if [ $M != 0 ]; printf "%dm " $M; end
@@ -187,7 +212,8 @@ function __oravi_dir
       case "$HOME"
         set dir '~'
       case '*'
-        set dir (__oravi_basename "$dir")
+        set dir (realpath --relative-base="$HOME" "$dir")
+        set dir "~/$dir"
     end
   end
   set_color -o $ORAVI_DIR_COLOR
@@ -251,7 +277,7 @@ function __oravi_git
     echo -n "$ORAVI_GIT_STATUS_DELETED"
   end
 
-  if [ (command dig rev-parse --verify refs/stash >/dev/null 2>&1) ]
+  if [ (command git rev-parse --verify refs/stash >/dev/null 2>&1) ]
     if [ $spacer = false ]; echo -n "$ORAVI_GIT_STATUS_PREFIX"; set -l spacer true; end
     set_color -o $ORAVI_GIT_STATUS_STASHED_COLOR
     echo -n "$ORAVI_GIT_STATUS_STASHED"
@@ -339,37 +365,37 @@ end
 
 function __oravi_pyenv
   if [ -z (__oravi_exists "pyenv") ]; return; end
-  set -l version (pyenv version-name)
-  if [ "$version" != "system" ]
+  set -l ver (pyenv version-name)
+  if [ "$ver" != "system" ]
     set_color -o $ORAVI_PYENV_COLOR
-    echo -n "$ORAVI_PYENV_PREFIX$version$ORAVI_PYENV_SUFFIX"
+    echo -n "$ORAVI_PYENV_PREFIX$ver$ORAVI_PYENV_SUFFIX"
     set_color normal
   end
 end
 function __oravi_swiftenv
   if [ -z (__oravi_exists "swiftenv") ]; return; end
-  set -l version (swiftenv version-name)
-  if [ "$version" != "system" ]
+  set -l ver (swiftenv version-name)
+  if [ "$ver" != "system" ]
     set_color -o $ORAVI_SWIFTENV_COLOR
-    echo -n "$ORAVI_SWIFTENV_PREFIX$version$ORAVI_SWIFTENV_SUFFIX"
+    echo -n "$ORAVI_SWIFTENV_PREFIX$ver$ORAVI_SWIFTENV_SUFFIX"
     set_color normal
   end
 end
 function __oravi_goenv
   if [ -z (__oravi_exists "goenv") ]; return; end
-  set -l version (goenv version-name)
-  if [ "$version" != "system" ]
+  set -l ver (goenv version-name)
+  if [ "$ver" != "system" ]
     set_color $ORAVI_GOENV_COLOR
-    echo -n "$ORAVI_GOENV_PREFIX$version$ORAVI_GOENV_SUFFIX"
+    echo -n "$ORAVI_GOENV_PREFIX$ver$ORAVI_GOENV_SUFFIX"
     set_color normal
   end
 end
 function __oravi_rbenv
   if [ -z (__oravi_exists "rbenv") ]; return; end
-  set -l version (rbenv version-name)
-  if [ "$version" != "system" ]
+  set -l ver (rbenv version-name)
+  if [ "$ver" != "system" ]
     set_color $ORAVI_RBENV_COLOR
-    echo -n "$ORAVI_RBENV_PREFIX$version$ORAVI_RBENV_SUFFIX"
+    echo -n "$ORAVI_RBENV_PREFIX$ver$ORAVI_RBENV_SUFFIX"
     set_color normal
   end
 end

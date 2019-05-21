@@ -32,7 +32,7 @@ $ omf install oravi
 
 # License
 
-[MIT][mit] © [{{USER}}][author] et [al][contributors]
+[MIT][mit] © [Arden Rasmussen][author] et [al][contributors]
 
 
 [mit]:            https://opensource.org/licenses/MIT
