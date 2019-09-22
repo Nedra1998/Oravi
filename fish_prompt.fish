@@ -82,7 +82,7 @@ set -q ORAVI_GIT_STATUS_DIVERGED; or set ORAVI_GIT_STATUS_DIVERGED "⇕ "
 # Jobs {{{
 set -q ORAVI_JOBS_PREFIX; or set ORAVI_JOBS_PREFIX ""
 set -q ORAVI_JOBS_SUFFIX; or set ORAVI_JOBS_SUFFIX ""
-set -q ORAVI_JOBS_SYMBOL; or set ORAVI_JOBS_SYMBOL "✦"
+set -q ORAVI_JOBS_SYMBOL; or set ORAVI_JOBS_SYMBOL "✦ "
 set -q ORAVI_JOBS_COLOR; or set ORAVI_JOBS_COLOR "blue"
 # }}}
 # PyEnv {{{
