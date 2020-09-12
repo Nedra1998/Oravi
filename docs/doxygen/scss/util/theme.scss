@@ -1,0 +1,55 @@
+@use "../config/colors" as *;
+
+@mixin themeUse($a, $property) {
+  #{$property}: $a;
+}
+@mixin themePick($a, $b, $property) {
+  @if $theme == 'auto' { 
+    #{$property}: $a;
+    @media (prefers-color-scheme: dark) { 
+      #{$property}: $b; 
+    }
+    @media (prefers-color-scheme: light) {
+      #{$property}: $a;
+    }
+  } @else if $theme == 'dark' {
+    #{$property}: $b; 
+  } @else { 
+    #{$property}: $a; 
+  } 
+}
+
+@mixin fg($property: color) { @include themePick($dark1, $light1, $property); }
+@mixin fg0($property: color) { @include themePick($dark0, $light0, $property); }
+@mixin fg1($property: color) { @include themePick($dark1, $light1, $property); }
+@mixin fg2($property: color) { @include themePick($dark2, $light2, $property); }
+@mixin fg3($property: color) { @include themePick($dark3, $light3, $property); }
+@mixin fg4($property: color) { @include themePick($dark4, $light4, $property); }
+
+@mixin bg($property: color) { @include themePick($light0, $dark0, $property); }
+@mixin bg0($property: color) { @include themePick($light0, $dark0, $property); }
+@mixin bg1($property: color) { @include themePick($light1, $dark1, $property); }
+@mixin bg2($property: color) { @include themePick($light2, $dark2, $property); }
+@mixin bg3($property: color) { @include themePick($light3, $dark3, $property); }
+@mixin bg4($property: color) { @include themePick($light4, $dark4, $property); }
+
+@mixin red($property:     color) { @include themeUse($red,     $property); }
+@mixin green($property:   color) { @include themeUse($green,   $property); }
+@mixin yellow($property:  color) { @include themeUse($yellow,  $property); }
+@mixin blue($property:    color) { @include themeUse($blue,    $property); }
+@mixin magenta($property: color) { @include themeUse($magenta, $property); }
+@mixin cyan($property:    color) { @include themeUse($cyan,    $property); }
+@mixin orange($property:  color) { @include themeUse($orange,  $property); }
+
+@mixin redAccent($property:     color) { @include themePick($dimRed,     $brightRed,     $property); }
+@mixin greenAccent($property:   color) { @include themePick($dimGreen,   $brightGreen,   $property); }
+@mixin yellowAccent($property:  color) { @include themePick($dimYellow,  $brightYellow,  $property); }
+@mixin blueAccent($property:    color) { @include themePick($dimBlue,    $brightBlue,    $property); }
+@mixin magentaAccent($property: color) { @include themePick($dimMagenta, $brightMagenta, $property); }
+@mixin cyanAccent($property:    color) { @include themePick($dimCyan,    $brightCyan,    $property); }
+@mixin orangeAccent($property:  color) { @include themePick($dimOrange,  $brightOrange,  $property); }
+
+@mixin primary($property:         color) { @include themeUse($primary,       $property);       }
+@mixin primaryAccent($property:   color) { @include themePick($dimPrimary,   $brightPrimary,   $property); }
+@mixin secondary($property:       color) { @include themeUse($secondary,     $property);       }
+@mixin secondaryAccent($property: color) { @include themePick($dimSecondary, $brightSecondary, $property); }

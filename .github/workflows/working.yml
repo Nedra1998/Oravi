@@ -1,0 +1,27 @@
+name: Working
+on:
+  push:
+    branches:
+      - '*'
+      - '!main'
+      - '!master'
+      - '!develop'
+      - '!development'
+
+jobs:
+  minimal:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: configure
+        run: mkdir ./build && cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug -DBUILD_DOCS=OFF -DENABLE_STATIC_ANALYSIS=OFF -DENABLE_COVERAGE=OFF -DENABLE_PROFILING=OFF
+      - name: compile
+        run: cmake --build ./build
+      - name: tests
+        run: cd ./build && ctest -VV

@@ -1,0 +1,79 @@
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen $doxygenversion"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--BEGIN PROJECT_NAME--><title>$projectname: $title</title><!--END PROJECT_NAME-->
+<!--BEGIN !PROJECT_NAME--><title>$title</title><!--END !PROJECT_NAME-->
+<link href="$relpath^tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="$relpath^jquery.js"></script>
+<script type="text/javascript" src="$relpath^dynsections.js"></script>
+<script>
+  $(function() {
+    $("#MSearchSelect").ready(function() { $("#MSearchSelect").replaceWith('<span class="iconsearch" id="MSearchSelect" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"/>'); });
+    $("#MSearchCloseImg").ready(function() { $("#MSearchCloseImg").replaceWith('<span class="iconsearchclose" id="MSearchCloseImg" />'); });
+    $("#MSearchResults").on("load", function() {
+      $("#MSearchResults").contents().find("head").append('<link href="/scss-search.css" rel="stylesheet" type="text/css" />');
+    });
+    function colorMap(input, prep = '') {
+      if(input === "black") return prep + "fg1";
+      else if(input === "white") return prep + "bg1";
+      else if(input === "red") return prep + "red";
+      else if(input === "midnightblue") return prep + "blue";
+      else if(input === "darkgreen") return prep + "green";
+      else if(input === "orange") return prep + "orange";
+      else if(input === "#bfbfbf") return prep + "bg3";
+      else if(input === "#8b1a1a") return prep + "red";
+      else if(input === "#9a32cd") return prep + "magenta";
+      else if(input === "#ddddee") return prep + "bg2";
+      else if(input === "#eeeeff") return prep + "bg3";
+      return "";
+    }
+    $("iframe").each(function() {
+      const svg = $(this).contents().find("svg");
+      svg.prepend('<link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" href="/scss-svg.css" type="text/css"/>');
+      svg.find("path").each(function() {
+        $(this).addClass(colorMap($(this).attr("stroke")));
+        $(this).addClass(colorMap($(this).attr("fill"), "fill"));
+      });
+      svg.find("polygon").each(function() {
+        $(this).addClass(colorMap($(this).attr("stroke")));
+        $(this).addClass(colorMap($(this).attr("fill"), "fill"));
+      });
+    });
+    $("iframe").on("load", function() {
+      const svg = $(this).contents().find("svg");
+      svg.prepend('<link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" href="/scss-svg.css" type="text/css"/>');
+      svg.find("path").each(function() {
+        $(this).addClass(colorMap($(this).attr("stroke")));
+        $(this).addClass(colorMap($(this).attr("fill"), "fill"));
+      });
+      svg.find("polygon").each(function() {
+        $(this).addClass(colorMap($(this).attr("stroke")));
+        $(this).addClass(colorMap($(this).attr("fill"), "fill"));
+      });
+    });
+  });
+</script>
+$treeview
+$search
+$mathjax
+<link href="$relpath^$stylesheet" rel="stylesheet" type="text/css" />
+$extrastylesheet
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+
+<!--BEGIN TITLEAREA-->
+<div id="titlearea">
+  <div class="doxheader">
+    <a ref="/" id="doxhome">$projectname</a>
+    <span class="chevron"></span>
+    <div class="doxbrief">$projectbrief</div>
+  </div>
+</div>
+<!--END TITLEAREA-->
+<!-- end header part -->

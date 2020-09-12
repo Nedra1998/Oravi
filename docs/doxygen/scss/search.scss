@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+@use "./normalize" as *;
+
+@use "./config/colors" as *;
+@use "./config/typography" as *;
+
+@use "./util/theme" as *;
+
+@use "./lib/include-media.scss" as *;
+
+/* General Styles
+ * -------------------------------------------------------------------------- */
+
+html, body {
+  @include fg(color);
+  @include bg(background-color);
+  font-family: $family-sans-serif;
+  font-size: 16px;
+}
+
+p { margin: 1em; font-size: 1em; }
+div { font-size: 1em; }
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid;
+  @include bg4(border-color);
+  margin: 1em 0;
+  padding: 0;
+}
+
+a {
+  @include secondary(color);
+  text-decoration: none;
+  &:hover {
+    @include secondaryAccent(color);
+    transition: 0.25s ease;
+  }
+}
+
+/* Search Results
+ * -------------------------------------------------------------------------- */
+
+.SRSymbol {
+  @include primary(color);
+  font-family: $family-sans-serif;
+  font-size: $size-7;
+}
+.SRScope {
+  font-size: $size-7;
+}

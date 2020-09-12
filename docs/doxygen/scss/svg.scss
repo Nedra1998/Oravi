@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+@use "./normalize" as *;
+
+@use "./config/colors" as *;
+@use "./config/typography" as *;
+
+@use "./util/theme" as *;
+
+@use "./lib/include-media.scss" as *;
+
+/* Text
+ * -------------------------------------------------------------------------- */
+text {
+  font-size: 10px;
+  font-family: $family-sans-serif;
+  @include fg0(fill);
+}
+
+/* Nodes
+ * -------------------------------------------------------------------------- */
+.fg0 { @include fg0(stroke) }
+.fillfg0 { @include fg0(fill) }
+.fg1 { @include fg1(stroke) }
+.fillfg1 { @include fg1(fill) }
+.fg2 { @include fg2(stroke) }
+.fillfg2 { @include fg2(fill) }
+.fg3 { @include fg3(stroke) }
+.fillfg3 { @include fg3(fill) }
+.fg4 { @include fg4(stroke) }
+.fillfg4 { @include fg4(fill) }
+
+.bg0 { @include bg0(stroke) }
+.fillbg0 { @include bg0(fill) }
+.bg1 { @include bg1(stroke) }
+.fillbg1 { @include bg1(fill) }
+.bg2 { @include bg2(stroke) }
+.fillbg2 { @include bg2(fill) }
+.bg3 { @include bg3(stroke) }
+.fillbg3 { @include bg3(fill) }
+.bg4 { @include bg4(stroke) }
+.fillbg4 { @include bg4(fill) }
+
+.red { @include red(stroke) }
+.fillred { @include red(fill) }
+.green { @include green(stroke) }
+.fillgreen { @include green(fill) }
+.yellow { @include yellow(stroke) }
+.fillyellow { @include yellow(fill) }
+.blue { @include blue(stroke) }
+.fillblue { @include blue(fill) }
+.magenta { @include magenta(stroke) }
+.fillmagenta { @include magenta(fill) }
+.cyan { @include cyan(stroke) }
+.fillcyan { @include cyan(fill) }
+.orange { @include orange(stroke) }
+.fillorange { @include orange(fill) }
